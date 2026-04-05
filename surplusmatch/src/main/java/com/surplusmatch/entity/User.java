@@ -19,8 +19,9 @@ public class User {
     @Column(name = "organization_name")
     private String organizationName;
 
+    @Enumerated(EnumType.STRING) // İŞTE HATAYI ÇÖZEN SATIR!
     @Column(nullable = false)
-    private String role; // "MARKET" veya "NGO"
+    private Role role; 
 
     public User() {}
 
@@ -33,6 +34,6 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public String getOrganizationName() { return organizationName; }
     public void setOrganizationName(String organizationName) { this.organizationName = organizationName; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 }

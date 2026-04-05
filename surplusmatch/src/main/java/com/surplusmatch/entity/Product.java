@@ -33,7 +33,7 @@ public class Product {
 
     public Product() {}
 
-    // Getter ve Setter Metotları
+    // Getter ve Setter 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
