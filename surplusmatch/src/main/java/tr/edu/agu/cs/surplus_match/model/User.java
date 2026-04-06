@@ -1,4 +1,4 @@
-package tr.edu.agu.surplus_match.model;
+package tr.edu.agu.cs.surplus_match.model;
 
 import jakarta.persistence.*;
 
@@ -35,5 +35,5 @@ public class User {
     public String getOrganizationName() { return organizationName; }
     public void setOrganizationName(String organizationName) { this.organizationName = organizationName; }
     public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public void setRole(Role role) { this.role = role;  }
 }
