@@ -1,4 +1,4 @@
-package com.surplusmatch.entity;
+package tr.edu.agu.surplus_match.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
