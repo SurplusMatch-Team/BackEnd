@@ -1,11 +1,11 @@
-package com.surplusmatch.entity;
+package tr.edu.agu.cs.surplus_match.model;
 
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "categories")
-public class Category {
+public class Category  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
