@@ -12,43 +12,44 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; // The Scrambler
+    private final PasswordEncoder passwordEncoder;
 
-    // Constructor Injection - Both must be here for Spring to work!
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // 1. SECURE REGISTER LOGIC
+    // ✅ GERÇEK KAYIT (REGISTER)
     public AuthResponse registerUser(RegisterRequest request) {
         User newUser = new User();
         newUser.setEmail(request.getEmail());
 
-        // 🔒 SCRAMBLE: Never save the raw password!
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        newUser.setPassword(encodedPassword);
+        // 🔒 Şifreyi şifrele (BCrypt)
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        newUser.setRole("NGO"); // Default role for now
+        // ✨ DİNAMİK ROL: Caner ne gönderirse o kaydedilir
+        newUser.setRole(request.getRole());
 
-        userRepository.save(newUser);
+        userRepository.save(newUser); // Veritabanına (SQL) yazma anı
 
         AuthResponse response = new AuthResponse();
-        response.setMessage("User registered with a SECURE hashed password!");
+        response.setMessage(request.getRole() + " kaydı başarıyla SQL veritabanına eklendi!");
         return response;
     }
 
-    // 2. SECURE LOGIN LOGIC
+    // ✅ GERÇEK GİRİŞ (LOGIN)
     public AuthResponse loginUser(LoginRequest request) {
         AuthResponse response = new AuthResponse();
+
+        // Veritabanında e-posta ile ara
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
 
         if (userOptional.isPresent()) {
             User foundUser = userOptional.get();
 
-            // 🔒 MATCH: Use .matches() because we can't "un-scramble" the hash
+            // 🔒 Şifre kontrolü (Hashed vs Plain)
             if (passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
-                response.setMessage("Login successful with secure check!");
+                response.setMessage("Giriş başarılı! Hoş geldin, " + foundUser.getRole());
 
                 AuthResponse.UserData data = new AuthResponse.UserData();
                 data.setId(foundUser.getId());
@@ -59,7 +60,7 @@ public class AuthService {
             }
         }
 
-        response.setMessage("Invalid email or password!");
+        response.setMessage("Hatalı e-posta veya şifre!");
         return response;
     }
 }

@@ -6,3 +6,11 @@
 .vscode/
 .idea/
 *.class
+# Maven
+target/
+
+# IDE
+.idea/
+
+# Mac
+.DS_Store

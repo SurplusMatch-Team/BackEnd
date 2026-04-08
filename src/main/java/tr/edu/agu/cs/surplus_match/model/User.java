@@ -26,14 +26,24 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    // (MARKET → PRODUCTS)
-    @JsonIgnore
-    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL, orphanRemoval = false)
+    // Adres bağlantısı (Muhammet'ten gelen profesyonel ekleme)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    // Marketlerin eklediği ürünler (Senin isimlendirmenle: market -> products)
+    @JsonIgnore // JSON çıktısında sonsuz döngüyü engeller, çok önemli!
+    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
+
+    // STK'ların yaptığı talepler (Muhammet'ten gelen ekleme)
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Claim> claims = new ArrayList<>();
 
     public User() {}
 
-    // Getter ve Setter'lar
+    // --- Getter ve Setter'lar ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -49,6 +59,12 @@ public class User {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 
+    public Address getAddress() { return address; }
+    public void setAddress(Address address) { this.address = address; }
+
     public List<Product> getProducts() { return products; }
     public void setProducts(List<Product> products) { this.products = products; }
+
+    public List<Claim> getClaims() { return claims; }
+    public void setClaims(List<Claim> claims) { this.claims = claims; }
 }

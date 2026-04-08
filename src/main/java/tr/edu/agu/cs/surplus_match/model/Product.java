@@ -20,22 +20,22 @@ public class Product {
     @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
 
-    private String status; // "ACTIVE" "CLAIMED"
+    private String status; // "ACTIVE", "CLAIMED" gibi senin kullandığın String yapı
 
     // Foreign Key relationships
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "users_id", nullable = false)
+    @JoinColumn(name = "users_id", nullable = false) // Senin MySQL kolon ismin
     private User market;
 
     @ManyToOne
-    @JoinColumn(name = "categories_id", nullable = false)
+    @JoinColumn(name = "categories_id", nullable = false) // Senin MySQL kolon ismin
     private Category category;
 
     public Product() {}
 
-    // Getter ve Setter 
+    // --- Getter ve Setter'lar ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
