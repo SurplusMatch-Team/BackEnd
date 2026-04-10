@@ -1,15 +1,33 @@
 package tr.edu.agu.cs.surplus_match.dto;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
+/**
+ * Carries the data required to add a new product.
+ */
 public class AddProductRequest {
 
+    @NotBlank(message = "Product name is required.")
     private String name;
+
+    @NotNull(message = "Quantity is required.")
+    @Min(value = 1, message = "Quantity must be at least 1.")
     private Integer quantity;
+
+    @NotNull(message = "Expiry date is required.")
+    @Future(message = "Expiry date must be in the future.")
     private LocalDateTime expiryDate;
-    private String status;
+
+    @NotNull(message = "Category id is required.")
     private Long categoryId;
-    private Long marketId;
+
+    @NotNull(message = "Owner id is required.")
+    private Long ownerId;
 
     public AddProductRequest() {
     }
@@ -18,47 +36,39 @@ public class AddProductRequest {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Integer getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 
     public LocalDateTime getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(LocalDateTime expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Long getCategoryId() {
         return categoryId;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
-    public Long getMarketId() {
-        return marketId;
-    }
-
-    public void setMarketId(Long marketId) {
-        this.marketId = marketId;
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 }

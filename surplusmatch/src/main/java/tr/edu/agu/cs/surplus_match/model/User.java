@@ -1,10 +1,13 @@
 package tr.edu.agu.cs.surplus_match.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 import java.util.ArrayList;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
+/**
+ * Represents a user in the system.
+ * A user can be either a MARKET or an NGO.
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -26,29 +29,83 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    // (MARKET → PRODUCTS)
-    @JsonIgnore
-    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<Product> products = new ArrayList<>();
+    /**
+     * Stores the products owned by this user.
+     * This is mainly used for MARKET users.
+     */
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<Product> ownedProducts = new ArrayList<>();
 
-    public User() {}
+    /**
+     * Stores the claims created by this user.
+     * This is mainly used for NGO users.
+     */
+    @OneToMany(mappedBy = "claimant", fetch = FetchType.LAZY)
+    private List<Claim> createdClaims = new ArrayList<>();
 
-    // Getter ve Setter'lar
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public User() {
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public User(String email, String password, String organizationName, Role role) {
+        this.email = email;
+        this.password = password;
+        this.organizationName = organizationName;
+        this.role = role;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getOrganizationName() { return organizationName; }
-    public void setOrganizationName(String organizationName) { this.organizationName = organizationName; }
+    public String getEmail() {
+        return email;
+    }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public String getPassword() {
+        return password;
+    }
 
-    public List<Product> getProducts() { return products; }
-    public void setProducts(List<Product> products) { this.products = products; }
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public List<Product> getOwnedProducts() {
+        return ownedProducts;
+    }
+
+    public List<Claim> getCreatedClaims() {
+        return createdClaims;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setOwnedProducts(List<Product> ownedProducts) {
+        this.ownedProducts = ownedProducts;
+    }
+
+    public void setCreatedClaims(List<Claim> createdClaims) {
+        this.createdClaims = createdClaims;
+    }
 }

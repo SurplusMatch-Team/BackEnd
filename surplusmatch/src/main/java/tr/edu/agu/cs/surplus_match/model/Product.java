@@ -2,8 +2,12 @@ package tr.edu.agu.cs.surplus_match.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Represents a product added by a MARKET user.
+ */
 @Entity
 @Table(name = "products")
 public class Product {
@@ -20,40 +24,101 @@ public class Product {
     @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
 
-    private String status; // "ACTIVE" "CLAIMED"
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProductStatus status;
 
-    // Foreign Key relationships
+    /**
+     * The user who owns and added this product.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User owner;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "users_id", nullable = false)
-    private User market;
-
-    @ManyToOne
-    @JoinColumn(name = "categories_id", nullable = false)
+    /**
+     * The category of this product.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    public Product() {}
+    /**
+     * The list of claims created for this product.
+     */
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Claim> claims = new ArrayList<>();
 
-    // Getter ve Setter 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Product() {
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    @PrePersist
+    protected void onCreate() {
+        if (this.status == null) {
+            this.status = ProductStatus.AVAILABLE;
+        }
+    }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Long getId() {
+        return id;
+    }
 
-    public LocalDateTime getExpiryDate() { return expiryDate; }
-    public void setExpiryDate(LocalDateTime expiryDate) { this.expiryDate = expiryDate; }
+    public String getName() {
+        return name;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-    public User getMarket() { return market; }
-    public void setMarket(User market) { this.market = market; }
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
+    }
 
-    public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public List<Claim> getClaims() {
+        return claims;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setClaims(List<Claim> claims) {
+        this.claims = claims;
+    }
 }

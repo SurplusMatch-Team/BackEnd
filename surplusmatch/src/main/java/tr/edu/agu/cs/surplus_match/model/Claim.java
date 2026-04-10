@@ -3,6 +3,9 @@ package tr.edu.agu.cs.surplus_match.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Represents a claim created by an NGO user for a product.
+ */
 @Entity
 @Table(name = "claims")
 public class Claim {
@@ -11,30 +14,76 @@ public class Claim {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "claim_date")
+    @Column(name = "claim_date", nullable = false, updatable = false)
     private LocalDateTime claimDate;
 
-    private String status; // "PENDING", "RECEIVED", "CANCELLED"
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ClaimStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "users_id") // Talebi yapan STK
-    private User user;
+    /**
+     * The user who created this claim.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "claimant_id", nullable = false)
+    private User claimant;
 
-    @ManyToOne
-    @JoinColumn(name = "products_id") // Talep edilen ürün
+    /**
+     * The product targeted by this claim.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Claim() {}
+    public Claim() {
+    }
 
-    // Getter ve Setter'lar
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public LocalDateTime getClaimDate() { return claimDate; }
-    public void setClaimDate(LocalDateTime claimDate) { this.claimDate = claimDate; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
+    @PrePersist
+    protected void onCreate() {
+        this.claimDate = LocalDateTime.now();
+
+        if (this.status == null) {
+            this.status = ClaimStatus.PENDING;
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getClaimDate() {
+        return claimDate;
+    }
+
+    public ClaimStatus getStatus() {
+        return status;
+    }
+
+    public User getClaimant() {
+        return claimant;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setClaimDate(LocalDateTime claimDate) {
+        this.claimDate = claimDate;
+    }
+
+    public void setStatus(ClaimStatus status) {
+        this.status = status;
+    }
+
+    public void setClaimant(User claimant) {
+        this.claimant = claimant;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }
