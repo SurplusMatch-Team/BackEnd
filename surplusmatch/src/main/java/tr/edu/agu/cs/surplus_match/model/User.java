@@ -1,5 +1,6 @@
 package tr.edu.agu.cs.surplus_match.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +32,17 @@ public class User {
 
     /**
      * Stores the products owned by this user.
-     * This is mainly used for MARKET users.
+     * Prevents infinite JSON recursion.
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<Product> ownedProducts = new ArrayList<>();
 
     /**
      * Stores the claims created by this user.
-     * This is mainly used for NGO users.
+     * Prevents infinite JSON recursion.
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "claimant", fetch = FetchType.LAZY)
     private List<Claim> createdClaims = new ArrayList<>();
 
