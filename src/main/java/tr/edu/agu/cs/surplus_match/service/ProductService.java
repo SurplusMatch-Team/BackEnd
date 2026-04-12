@@ -2,6 +2,7 @@ package tr.edu.agu.cs.surplus_match.service;
 
 import org.springframework.stereotype.Service;
 import tr.edu.agu.cs.surplus_match.model.Product;
+import tr.edu.agu.cs.surplus_match.model.ProductStatus;
 import tr.edu.agu.cs.surplus_match.repository.ProductRepository;
 
 import java.util.List;
@@ -15,10 +16,10 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    // Tüm ürünleri getir (Genel liste için)
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
+    public List<Product> getAllAvailableProducts() {
+    // Repository'de tanımladığımız metodu çağırıyoruz
+    return productRepository.findByStatus(ProductStatus.AVAILABLE);
+}
 
     // Sadece belli bir marketin (user) ürünlerini getir (Caner'in istediği envanter)
     public List<Product> getProductsByUserId(Long userId) {

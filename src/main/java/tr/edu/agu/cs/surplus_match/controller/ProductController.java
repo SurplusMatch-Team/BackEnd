@@ -19,10 +19,10 @@ public class ProductController {
     }
 
     // URL: GET http://localhost:8080/api/products
-    @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
-    }
+   @GetMapping
+public ResponseEntity<List<Product>> getAllProducts() {
+    return ResponseEntity.ok(productService.getAllAvailableProducts());
+}
 
     // URL: GET http://localhost:8080/api/products/market/1
     @GetMapping("/market/{userId}")
