@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import tr.edu.agu.cs.surplus_match.dto.*;
 import tr.edu.agu.cs.surplus_match.model.User;
 import tr.edu.agu.cs.surplus_match.repository.UserRepository;
-
+import tr.edu.agu.cs.surplus_match.model.Role;
 import java.util.Optional;
 
 @Service
@@ -19,16 +19,13 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ GERÇEK KAYIT (REGISTER)
     public AuthResponse registerUser(RegisterRequest request) {
         User newUser = new User();
         newUser.setEmail(request.getEmail());
 
-        // 🔒 Şifreyi şifrele (BCrypt)
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // ✨ DİNAMİK ROL: Caner ne gönderirse o kaydedilir
-        newUser.setRole(request.getRole());
+        newUser.setRole(Role.valueOf(request.getRole().toUpperCase()));
 
         userRepository.save(newUser); // Veritabanına (SQL) yazma anı
 
@@ -54,7 +51,7 @@ public class AuthService {
                 AuthResponse.UserData data = new AuthResponse.UserData();
                 data.setId(foundUser.getId());
                 data.setEmail(foundUser.getEmail());
-                data.setRole(foundUser.getRole());
+              data.setRole(foundUser.getRole().name());
                 response.setUser(data);
                 return response;
             }
