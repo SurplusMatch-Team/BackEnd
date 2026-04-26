@@ -1,5 +1,6 @@
 package tr.edu.agu.cs.surplus_match.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,9 +20,10 @@ public class Product {
     @Column(length = 1000)
     private String description;
 
+    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "expiry_date")
+    @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
     @Enumerated(EnumType.STRING)
@@ -38,14 +40,15 @@ public class Product {
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pickup_address_id")
     private Address pickupAddress;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Claim> claims = new ArrayList<>();
 
@@ -68,6 +71,7 @@ public class Product {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+
         if (this.status == null) {
             this.status = ProductStatus.AVAILABLE;
         }

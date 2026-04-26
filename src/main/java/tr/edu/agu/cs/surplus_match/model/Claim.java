@@ -14,6 +14,9 @@ public class Claim {
     @Column(name = "claim_date", nullable = false, updatable = false)
     private LocalDateTime claimDate;
 
+    @Column(name = "requested_quantity", nullable = false)
+    private Integer requestedQuantity;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ClaimStatus status;
@@ -38,10 +41,18 @@ public class Claim {
         this.status = status;
     }
 
+    public Claim(User claimant, Product product, Integer requestedQuantity, ClaimStatus status) {
+        this.claimant = claimant;
+        this.product = product;
+        this.requestedQuantity = requestedQuantity;
+        this.status = status;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.claimDate = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+
         if (this.status == null) {
             this.status = ClaimStatus.PENDING;
         }
@@ -66,6 +77,14 @@ public class Claim {
 
     public void setClaimDate(LocalDateTime claimDate) {
         this.claimDate = claimDate;
+    }
+
+    public Integer getRequestedQuantity() {
+        return requestedQuantity;
+    }
+
+    public void setRequestedQuantity(Integer requestedQuantity) {
+        this.requestedQuantity = requestedQuantity;
     }
 
     public ClaimStatus getStatus() {

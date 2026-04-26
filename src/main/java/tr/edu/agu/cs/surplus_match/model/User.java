@@ -1,9 +1,9 @@
 package tr.edu.agu.cs.surplus_match.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore; // 1. BU IMPORTU EKLEDİK
 
 @Entity
 @Table(name = "users")
@@ -19,7 +19,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "organization_name")
+    @Column(name = "organization_name", nullable = false)
     private String organizationName;
 
     @Enumerated(EnumType.STRING)
@@ -30,20 +30,12 @@ public class User {
     @JoinColumn(name = "address_id", unique = true)
     private Address address;
 
-    /**
-     * 2. @JsonIgnore EKLEDİK: 
-     * Market sahibi kendi envanterini zaten yeni açtığımız 
-     * /api/products/market/{id} endpoint'inden görecek. 
-     * Buradaki listeyi gizleyerek "Inception" hatasını bitiriyoruz.
-     */
+    // Prevents circular JSON serialization when returning user data.
     @JsonIgnore
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<Product> ownedProducts = new ArrayList<>();
 
-    /**
-     * 3. BURAYA DA @JsonIgnore EKLEDİK:
-     * Kullanıcı bilgisi çekilirken tüm taleplerin JSON'a dolmasını engeller.
-     */
+    // Prevents circular JSON serialization when returning user data.
     @JsonIgnore
     @OneToMany(mappedBy = "claimant", fetch = FetchType.LAZY)
     private List<Claim> createdClaims = new ArrayList<>();
@@ -58,21 +50,67 @@ public class User {
         this.role = role;
     }
 
-    // --- Getter ve Setterlar (Burası aynı kalıyor) ---
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    public String getOrganizationName() { return organizationName; }
-    public void setOrganizationName(String organizationName) { this.organizationName = organizationName; }
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
-    public Address getAddress() { return address; }
-    public void setAddress(Address address) { this.address = address; }
-    public List<Product> getOwnedProducts() { return ownedProducts; }
-    public void setOwnedProducts(List<Product> ownedProducts) { this.ownedProducts = ownedProducts; }
-    public List<Claim> getCreatedClaims() { return createdClaims; }
-    public void setCreatedClaims(List<Claim> createdClaims) { this.createdClaims = createdClaims; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public List<Product> getOwnedProducts() {
+        return ownedProducts;
+    }
+
+    public void setOwnedProducts(List<Product> ownedProducts) {
+        this.ownedProducts = ownedProducts;
+    }
+
+    public List<Claim> getCreatedClaims() {
+        return createdClaims;
+    }
+
+    public void setCreatedClaims(List<Claim> createdClaims) {
+        this.createdClaims = createdClaims;
+    }
 }
