@@ -1,9 +1,9 @@
 package tr.edu.agu.cs.surplus_match.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -19,31 +19,28 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "organization_name")
+    @Column(name = "organization_name", nullable = false)
     private String organizationName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    // Adres bağlantısı (Muhammet'ten gelen profesyonel ekleme)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
 
-    // Marketlerin eklediği ürünler (Senin isimlendirmenle: market -> products)
-    @JsonIgnore // JSON çıktısında sonsuz döngüyü engeller, çok önemli!
-    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 
-    // STK'ların yaptığı talepler (Muhammet'ten gelen ekleme)
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Claim> claims = new ArrayList<>();
 
     public User() {}
 
-    // --- Getter ve Setter'lar ---
+    // --- Getters and Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

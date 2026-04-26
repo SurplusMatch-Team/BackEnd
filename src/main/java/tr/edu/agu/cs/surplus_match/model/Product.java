@@ -1,8 +1,10 @@
 package tr.edu.agu.cs.surplus_match.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -15,31 +17,59 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
+    @Column(length = 1000)
+    private String description;
+
+    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "expiry_date")
+    @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
-    private String status; // "ACTIVE" "CLAIMED"
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProductStatus status;
 
-    // Foreign Key relationships
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "users_id", nullable = false)
-    private User market;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User owner;
 
-    @ManyToOne
-    @JoinColumn(name = "categories_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Claim> claims = new ArrayList<>();
 
     public Product() {}
 
-    // Getter ve Setter
+    @PrePersist
+    protected void onCreate() {
+        this.updatedAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = ProductStatus.AVAILABLE;
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // --- Getters and Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
@@ -47,12 +77,18 @@ public class Product {
     public LocalDateTime getExpiryDate() { return expiryDate; }
     public void setExpiryDate(LocalDateTime expiryDate) { this.expiryDate = expiryDate; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public ProductStatus getStatus() { return status; }
+    public void setStatus(ProductStatus status) { this.status = status; }
 
-    public User getMarket() { return market; }
-    public void setMarket(User market) { this.market = market; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
+
+    public List<Claim> getClaims() { return claims; }
+    public void setClaims(List<Claim> claims) { this.claims = claims; }
 }

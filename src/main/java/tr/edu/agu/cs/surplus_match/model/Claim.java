@@ -17,23 +17,36 @@ public class Claim {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Muhammet'in eklediği Enum yapısını kullanıyoruz (Daha profesyonel)
+    @Column(name = "requested_quantity", nullable = false)
+    private Integer requestedQuantity;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ClaimStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "users_id", nullable = false) // Senin DB sütun isminle uyumlu bıraktık
+    @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "products_id", nullable = false) // Senin DB sütun isminle uyumlu bıraktık
+    @JoinColumn(name = "products_id", nullable = false)
     private Product product;
 
-    public Claim() {
+    public Claim() {}
+
+    public Claim(User user, Product product, ClaimStatus status) {
+        this.user = user;
+        this.product = product;
+        this.status = status;
     }
 
-    // Veri kaydedilmeden hemen önce tarihleri otomatik atar
+    public Claim(User user, Product product, Integer requestedQuantity, ClaimStatus status) {
+        this.user = user;
+        this.product = product;
+        this.requestedQuantity = requestedQuantity;
+        this.status = status;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.claimDate = LocalDateTime.now();
@@ -43,13 +56,12 @@ public class Claim {
         }
     }
 
-    // Veri her güncellendiğinde updatedAt tarihini yeniler
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // --- Getter ve Setter'lar ---
+    // --- Getters and Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -58,6 +70,9 @@ public class Claim {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public Integer getRequestedQuantity() { return requestedQuantity; }
+    public void setRequestedQuantity(Integer requestedQuantity) { this.requestedQuantity = requestedQuantity; }
 
     public ClaimStatus getStatus() { return status; }
     public void setStatus(ClaimStatus status) { this.status = status; }

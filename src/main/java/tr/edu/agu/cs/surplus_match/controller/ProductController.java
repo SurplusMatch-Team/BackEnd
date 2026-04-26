@@ -11,24 +11,29 @@ import tr.edu.agu.cs.surplus_match.model.User;
 import tr.edu.agu.cs.surplus_match.repository.CategoryRepository;
 import tr.edu.agu.cs.surplus_match.repository.ProductRepository;
 import tr.edu.agu.cs.surplus_match.repository.UserRepository;
+import tr.edu.agu.cs.surplus_match.service.ProductService;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin(origins = "*")
 public class ProductController {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductService productService;
 
     public ProductController(ProductRepository productRepository,
                              UserRepository userRepository,
-                             CategoryRepository categoryRepository) {
+                             CategoryRepository categoryRepository,
+                             ProductService productService) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.productService = productService;
     }
 
     @PostMapping("/add")
@@ -59,8 +64,7 @@ public class ProductController {
         product.setName(request.getName());
         product.setQuantity(request.getQuantity());
         product.setExpiryDate(request.getExpiryDate());
-        product.setStatus(request.getStatus());
-        product.setMarket(market);
+        product.setOwner(market);
         product.setCategory(category);
 
         Product savedProduct = productRepository.save(product);
@@ -70,6 +74,11 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productRepository.findAll());
+        return ResponseEntity.ok(productService.getAllAvailableProducts());
+    }
+
+    @GetMapping("/market/{userId}")
+    public ResponseEntity<List<Product>> getMarketInventory(@PathVariable Long userId) {
+        return ResponseEntity.ok(productService.getProductsByUserId(userId));
     }
 }

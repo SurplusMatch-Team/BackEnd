@@ -26,8 +26,6 @@ public class AuthService {
         User newUser = new User();
         newUser.setEmail(request.getEmail());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        // String role -> Role enum dönüşümü
         newUser.setRole(Role.valueOf(request.getRole().toUpperCase()));
 
         userRepository.save(newUser);
