@@ -26,12 +26,13 @@ public class AuthService {
         User newUser = new User();
         newUser.setEmail(request.getEmail());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        newUser.setOrganizationName(request.getOrganizationName());
         newUser.setRole(Role.valueOf(request.getRole().toUpperCase()));
 
         userRepository.save(newUser);
 
         AuthResponse response = new AuthResponse();
-        response.setMessage(request.getRole() + " kaydı başarıyla SQL veritabanına eklendi!");
+        response.setMessage(request.getRole() + " registered successfully.");
         return response;
     }
 
@@ -44,7 +45,7 @@ public class AuthService {
             User foundUser = userOptional.get();
 
             if (passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
-                response.setMessage("Giriş başarılı! Hoş geldin, " + foundUser.getRole());
+                response.setMessage("Login successful.");
 
                 AuthResponse.UserData data = new AuthResponse.UserData();
                 data.setId(foundUser.getId());
@@ -55,7 +56,7 @@ public class AuthService {
             }
         }
 
-        response.setMessage("Hatalı e-posta veya şifre!");
+        response.setMessage("Invalid email or password.");
         return response;
     }
 }
