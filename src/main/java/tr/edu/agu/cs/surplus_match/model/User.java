@@ -1,14 +1,16 @@
 package tr.edu.agu.cs.surplus_match.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
 
-@Entity // 1. Tells JPA to create a table for this class
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 @Table(name = "users")
-@Data // 2. Lombok generates getters/setters
 public class User {
 
-    @Id // 3. Primary Key
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -18,5 +20,66 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String role; // NGO, DONOR, etc.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "claimant", fetch = FetchType.LAZY)
+    private List<Claim> claims = new ArrayList<>();
+
+    public User() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public List<Claim> getClaims() {
+        return claims;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void setClaims(List<Claim> claims) {
+        this.claims = claims;
+    }
 }

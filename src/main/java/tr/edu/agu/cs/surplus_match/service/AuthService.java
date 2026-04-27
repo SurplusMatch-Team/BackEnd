@@ -3,6 +3,7 @@ package tr.edu.agu.cs.surplus_match.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tr.edu.agu.cs.surplus_match.dto.*;
+import tr.edu.agu.cs.surplus_match.model.Role;
 import tr.edu.agu.cs.surplus_match.model.User;
 import tr.edu.agu.cs.surplus_match.repository.UserRepository;
 
@@ -29,7 +30,11 @@ public class AuthService {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         newUser.setPassword(encodedPassword);
 
-        newUser.setRole("NGO"); // Default role for now
+        if (request.getRole() != null && !request.getRole().isBlank()) {
+            newUser.setRole(Role.valueOf(request.getRole().toUpperCase()));
+        } else {
+            newUser.setRole(Role.NGO);
+        }
 
         userRepository.save(newUser);
 
@@ -53,7 +58,7 @@ public class AuthService {
                 AuthResponse.UserData data = new AuthResponse.UserData();
                 data.setId(foundUser.getId());
                 data.setEmail(foundUser.getEmail());
-                data.setRole(foundUser.getRole());
+                data.setRole(foundUser.getRole().name());
                 response.setUser(data);
                 return response;
             }
