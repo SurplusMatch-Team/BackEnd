@@ -3,6 +3,7 @@ package tr.edu.agu.cs.surplus_match.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import tr.edu.agu.cs.surplus_match.model.Product;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 =======
@@ -16,3 +17,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByOwnerId(Long ownerId);
 >>>>>>> 34fecc9a64ef8f73c1b78acf14c272b8999724cc
 }
+=======
+import tr.edu.agu.cs.surplus_match.model.ProductStatus;
+
+import java.util.List;
+
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    List<Product> findAllByOrderByCreatedAtDesc();
+
+    List<Product> findByOwnerId(Long ownerId);
+
+    List<Product> findByStatusAndQuantityGreaterThanOrderByExpiryDateAsc(ProductStatus status, Integer quantity);
+}
+>>>>>>> origin/muhammet

@@ -1,5 +1,6 @@
 package tr.edu.agu.cs.surplus_match.model;
 
+<<<<<<< HEAD
 /**
  * Enum for Product status
  * AVAILABLE: Product is available for claiming
@@ -12,3 +13,9 @@ public enum ProductStatus {
     CLOSED
 }
 
+=======
+public enum ProductStatus {
+    AVAILABLE,
+    CLOSED
+}
+>>>>>>> origin/muhammet

@@ -12,14 +12,24 @@ public class AuthResponse {
         return message;
     }
 
+<<<<<<< HEAD
     public void setMessage(String message) {
         this.message = message;
     }
 
+=======
+>>>>>>> origin/muhammet
     public UserData getUser() {
         return user;
     }
 
+<<<<<<< HEAD
+=======
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+>>>>>>> origin/muhammet
     public void setUser(UserData user) {
         this.user = user;
     }
@@ -36,22 +46,39 @@ public class AuthResponse {
             return id;
         }
 
+<<<<<<< HEAD
         public void setId(Long id) {
             this.id = id;
         }
 
+=======
+>>>>>>> origin/muhammet
         public String getEmail() {
             return email;
+        }
+
+<<<<<<< HEAD
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+=======
+>>>>>>> origin/muhammet
+        public String getRole() {
+            return role;
+        }
+
+<<<<<<< HEAD
+=======
+        public void setId(Long id) {
+            this.id = id;
         }
 
         public void setEmail(String email) {
             this.email = email;
         }
 
-        public String getRole() {
-            return role;
-        }
-
+>>>>>>> origin/muhammet
         public void setRole(String role) {
             this.role = role;
         }

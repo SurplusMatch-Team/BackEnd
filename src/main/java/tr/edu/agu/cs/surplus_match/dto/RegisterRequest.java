@@ -4,7 +4,10 @@ public class RegisterRequest {
 
     private String email;
     private String password;
+<<<<<<< HEAD
     private String organizationName;
+=======
+>>>>>>> origin/muhammet
     private String role;
 
     public RegisterRequest() {
@@ -14,14 +17,18 @@ public class RegisterRequest {
         return email;
     }
 
+<<<<<<< HEAD
     public void setEmail(String email) {
         this.email = email;
     }
     
+=======
+>>>>>>> origin/muhammet
     public String getPassword() {
         return password;
     }
 
+<<<<<<< HEAD
     public void setPassword(String password) {
         this.password = password;
     }
@@ -34,10 +41,23 @@ public class RegisterRequest {
         this.organizationName = organizationName;
     }
 
+=======
+>>>>>>> origin/muhammet
     public String getRole() {
         return role;
     }
 
+<<<<<<< HEAD
+=======
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+>>>>>>> origin/muhammet
     public void setRole(String role) {
         this.role = role;
     }

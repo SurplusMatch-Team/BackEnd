@@ -12,14 +12,24 @@ public class LoginRequest {
         return email;
     }
 
+<<<<<<< HEAD
     public void setEmail(String email) {
         this.email = email;
     }
 
+=======
+>>>>>>> origin/muhammet
     public String getPassword() {
         return password;
     }
 
+<<<<<<< HEAD
+=======
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+>>>>>>> origin/muhammet
     public void setPassword(String password) {
         this.password = password;
     }
