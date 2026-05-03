@@ -2,7 +2,6 @@ package tr.edu.agu.cs.surplus_match.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/claims")
-@CrossOrigin(origins = "*")
 public class ClaimController {
 
     private final ClaimService claimService;

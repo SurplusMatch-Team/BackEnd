@@ -54,11 +54,11 @@ public class Product {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "users_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "categories_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @JsonIgnore

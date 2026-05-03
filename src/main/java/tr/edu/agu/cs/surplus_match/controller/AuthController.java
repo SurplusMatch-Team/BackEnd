@@ -7,7 +7,6 @@ import tr.edu.agu.cs.surplus_match.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     // 1. We declare the Service we need

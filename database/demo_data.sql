@@ -3,7 +3,7 @@ USE mydb;
 -- Demo users are intentionally not inserted here.
 -- Create them through /api/auth/register so passwords are hashed by backend logic.
 
-INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, user_id, category_id)
+INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, unit, user_id, category_id)
 SELECT
     'Bread',
     'Fresh bakery bread',
@@ -12,6 +12,7 @@ SELECT
     NOW(),
     NOW(),
     'AVAILABLE',
+    'UNIT',
     u.id,
     c.id
 FROM users u
@@ -23,7 +24,7 @@ WHERE u.email = 'market1@example.com'
       WHERE p.name = 'Bread' AND p.user_id = u.id
   );
 
-INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, user_id, category_id)
+INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, unit, user_id, category_id)
 SELECT
     'Tomatoes',
     'Fresh ripe tomatoes',
@@ -32,6 +33,7 @@ SELECT
     NOW(),
     NOW(),
     'AVAILABLE',
+    'UNIT',
     u.id,
     c.id
 FROM users u
@@ -43,7 +45,7 @@ WHERE u.email = 'market1@example.com'
       WHERE p.name = 'Tomatoes' AND p.user_id = u.id
   );
 
-INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, user_id, category_id)
+INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, unit, user_id, category_id)
 SELECT
     'Milk',
     'Dairy milk',
@@ -52,6 +54,7 @@ SELECT
     NOW(),
     NOW(),
     'AVAILABLE',
+    'UNIT',
     u.id,
     c.id
 FROM users u
@@ -63,7 +66,7 @@ WHERE u.email = 'market2@example.com'
       WHERE p.name = 'Milk' AND p.user_id = u.id
   );
 
-INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, user_id, category_id)
+INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, unit, user_id, category_id)
 SELECT
     'Apples',
     'Fresh apples',
@@ -72,6 +75,7 @@ SELECT
     NOW(),
     NOW(),
     'AVAILABLE',
+    'UNIT',
     u.id,
     c.id
 FROM users u
@@ -83,7 +87,7 @@ WHERE u.email = 'market2@example.com'
       WHERE p.name = 'Apples' AND p.user_id = u.id
   );
 
-INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, user_id, category_id)
+INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, unit, user_id, category_id)
 SELECT
     'Rice',
     'Dry food rice',
@@ -92,6 +96,7 @@ SELECT
     NOW(),
     NOW(),
     'AVAILABLE',
+    'UNIT',
     u.id,
     c.id
 FROM users u
@@ -168,7 +173,7 @@ WHERE claimant.email = 'ngo1@example.com'
 
 UPDATE products p
 JOIN users u ON u.id = p.user_id
-SET p.quantity = p.quantity - 3,
+SET p.quantity = 12,
     p.updated_at = NOW()
 WHERE p.name = 'Tomatoes'
   AND u.email = 'market1@example.com'

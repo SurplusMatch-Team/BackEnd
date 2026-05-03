@@ -38,11 +38,11 @@ public class Claim {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "users_id", nullable = false)
+    @JoinColumn(name = "claimant_id", nullable = false)
     private User claimant;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "products_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public Claim() {

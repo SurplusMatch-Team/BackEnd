@@ -24,7 +24,7 @@ public class Address {
     private String fullAddress;
 
     @OneToOne
-    @JoinColumn(name = "users_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Address() {
