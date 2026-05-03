@@ -1,40 +1,40 @@
 package tr.edu.agu.cs.surplus_match.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.PositiveOrZero;
 import tr.edu.agu.cs.surplus_match.model.ProductUnit;
 
 import java.time.LocalDateTime;
 
-public class AddProductRequest {
-
-    @NotBlank
-    private String name;
-
-    @NotNull
-    @Min(1)
-    private Integer quantity;
-
-    @NotNull
-    private LocalDateTime expiryDate;
-
-    @NotNull
-    private Long categoryId;
+/** Partial update: only non-null fields are applied. {@code ownerId} authorizes MARKET ownership. */
+public class PatchProductRequest {
 
     /**
-     * Product owner (market user). JSON may send {@code ownerId} or legacy {@code marketId}.
+     * Market user performing the edit. JSON may send {@code marketId}.
      */
     @NotNull
     @JsonAlias("marketId")
     private Long ownerId;
 
-    /** Defaults to UNIT on the entity when omitted. */
+    private String name;
+
+    /** When supplied, updates stock (0 closes listing — same as DELETE). */
+    @PositiveOrZero
+    private Integer quantity;
+
+    private LocalDateTime expiryDate;
+
+    private Long categoryId;
+
     private ProductUnit unit;
 
-    public AddProductRequest() {
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getName() {
@@ -67,14 +67,6 @@ public class AddProductRequest {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
     }
 
     public ProductUnit getUnit() {

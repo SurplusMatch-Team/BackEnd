@@ -1,6 +1,13 @@
 package tr.edu.agu.cs.surplus_match.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "addresses")
@@ -16,11 +23,12 @@ public class Address {
     @Column(name = "full_address")
     private String fullAddress;
 
-    @ManyToOne
-    @JoinColumn(name = "users_id")
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Address() {}
+    public Address() {
+    }
 
     public Long getId() {
         return id;
