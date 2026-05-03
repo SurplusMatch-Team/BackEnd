@@ -1,9 +1,6 @@
 package tr.edu.agu.cs.surplus_match.controller;
 
-<<<<<<< HEAD
-=======
 import org.springframework.http.ResponseEntity;
->>>>>>> origin/muhammet
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,14 +20,7 @@ public class CategoryController {
     }
 
     @GetMapping
-<<<<<<< HEAD
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
-    }
-}
-=======
     public ResponseEntity<List<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryRepository.findAll());
     }
 }
->>>>>>> origin/muhammet

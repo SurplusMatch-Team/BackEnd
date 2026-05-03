@@ -1,18 +1,12 @@
 package tr.edu.agu.cs.surplus_match.service;
 
-<<<<<<< HEAD
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import tr.edu.agu.cs.surplus_match.model.*;
-import tr.edu.agu.cs.surplus_match.repository.*;
-
-import java.time.LocalDateTime;
-=======
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import tr.edu.agu.cs.surplus_match.dto.CreateClaimRequest;
+import tr.edu.agu.cs.surplus_match.dto.PatchClaimRequest;
+import tr.edu.agu.cs.surplus_match.dto.WithdrawClaimRequest;
 import tr.edu.agu.cs.surplus_match.model.Claim;
 import tr.edu.agu.cs.surplus_match.model.ClaimStatus;
 import tr.edu.agu.cs.surplus_match.model.Product;
@@ -24,7 +18,6 @@ import tr.edu.agu.cs.surplus_match.repository.ProductRepository;
 import tr.edu.agu.cs.surplus_match.repository.UserRepository;
 
 import java.util.List;
->>>>>>> origin/muhammet
 
 @Service
 public class ClaimService {
@@ -33,43 +26,14 @@ public class ClaimService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-<<<<<<< HEAD
-    public ClaimService(ClaimRepository claimRepository, ProductRepository productRepository, UserRepository userRepository) {
-=======
     public ClaimService(ClaimRepository claimRepository,
                         ProductRepository productRepository,
                         UserRepository userRepository) {
->>>>>>> origin/muhammet
         this.claimRepository = claimRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
 
-<<<<<<< HEAD
-    @Transactional // Hem claim eklenmeli hem ürün güncellenmeli (ya ikisi ya hiçbiri!)
-    public Claim createClaim(Long claimantId, Long productId) {
-        // 1. Ürünü ve Kullanıcıyı (NGO) bulalım
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Ürün bulunamadı!"));
-        
-        User claimant = userRepository.findById(claimantId)
-                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
-
-        // 2. Caner'in istediği düzeltme: Ürün artık AVAILABLE olmamalı
-        product.setStatus(ProductStatus.PENDING); 
-        productRepository.save(product);
-
-        // 3. Yeni Claim (Talep) nesnesini oluşturalım
-        Claim claim = new Claim();
-        claim.setProduct(product);
-        claim.setClaimant(claimant);
-        claim.setClaimDate(LocalDateTime.now());
-        claim.setStatus(ClaimStatus.PENDING); // Talebin kendi durumu
-
-        return claimRepository.save(claim);
-    }
-}
-=======
     @Transactional
     public Claim createClaim(CreateClaimRequest request) {
         User claimant = userRepository.findById(request.getClaimantId())
@@ -90,7 +54,8 @@ public class ClaimService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Closed products cannot be claimed.");
         }
 
-        if (claimRepository.existsByClaimantIdAndProductId(claimant.getId(), product.getId())) {
+        if (claimRepository.existsByClaimantIdAndProductIdAndStatus(
+                claimant.getId(), product.getId(), ClaimStatus.PENDING)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate claim is not allowed.");
         }
 
@@ -104,7 +69,12 @@ public class ClaimService {
         claim.setRequestedQuantity(request.getRequestedQuantity());
         claim.setStatus(ClaimStatus.PENDING);
 
-        return claimRepository.save(claim);
+        Claim saved = claimRepository.save(claim);
+
+        refreshProductListingStatus(product);
+        productRepository.save(product);
+
+        return saved;
     }
 
     public List<Claim> getClaimsByProduct(Long productId) {
@@ -130,13 +100,14 @@ public class ClaimService {
         }
 
         product.setQuantity(product.getQuantity() - claim.getRequestedQuantity());
-        if (product.getQuantity() == 0) {
-            product.setStatus(ProductStatus.CLOSED);
-        }
 
         claim.setStatus(ClaimStatus.APPROVED);
+        claimRepository.save(claim);
+
+        refreshProductListingStatus(product);
         productRepository.save(product);
-        return claimRepository.save(claim);
+
+        return claim;
     }
 
     @Transactional
@@ -148,8 +119,81 @@ public class ClaimService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only PENDING claims can be rejected.");
         }
 
+        Product product = claim.getProduct();
+
         claim.setStatus(ClaimStatus.REJECTED);
+        claimRepository.save(claim);
+
+        refreshProductListingStatus(product);
+        productRepository.save(product);
+
+        return claim;
+    }
+
+    @Transactional
+    public Claim withdrawClaim(Long claimId, WithdrawClaimRequest request) {
+        User user = userRepository.findById(request.getClaimantId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Claimant not found."));
+        if (user.getRole() != Role.NGO) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only NGO users can withdraw claims.");
+        }
+
+        Claim claim = claimRepository.findById(claimId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Claim not found."));
+        if (!claim.getClaimant().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your claim.");
+        }
+        if (claim.getStatus() != ClaimStatus.PENDING) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only PENDING claims can be withdrawn.");
+        }
+
+        Product product = claim.getProduct();
+        claim.setStatus(ClaimStatus.WITHDRAWN);
+        claimRepository.save(claim);
+
+        refreshProductListingStatus(product);
+        productRepository.save(product);
+
+        return claim;
+    }
+
+    @Transactional
+    public Claim patchClaim(Long claimId, PatchClaimRequest request) {
+        User user = userRepository.findById(request.getClaimantId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Claimant not found."));
+        if (user.getRole() != Role.NGO) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only NGO users can edit claims.");
+        }
+
+        Claim claim = claimRepository.findById(claimId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Claim not found."));
+        if (!claim.getClaimant().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your claim.");
+        }
+        if (claim.getStatus() != ClaimStatus.PENDING) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only PENDING claims can be edited.");
+        }
+
+        Product product = claim.getProduct();
+        if (request.getRequestedQuantity() > product.getQuantity()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds product quantity.");
+        }
+
+        claim.setRequestedQuantity(request.getRequestedQuantity());
         return claimRepository.save(claim);
     }
+
+    /**
+     * Recomputes product availability from inventory and pending claim count — does not change quantity except via callers.
+     */
+    private void refreshProductListingStatus(Product product) {
+        int qty = product.getQuantity() != null ? product.getQuantity() : 0;
+        long pendingCount = claimRepository.countByProductIdAndStatus(product.getId(), ClaimStatus.PENDING);
+
+        if (qty <= 0) {
+            product.setStatus(ProductStatus.CLOSED);
+            return;
+        }
+        product.setStatus(pendingCount > 0 ? ProductStatus.PENDING : ProductStatus.AVAILABLE);
+    }
 }
->>>>>>> origin/muhammet
