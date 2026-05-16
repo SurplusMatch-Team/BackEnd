@@ -36,7 +36,7 @@ public class Claim {
     @Column(nullable = false)
     private ClaimStatus status;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "claimant_id", nullable = false)
     private User claimant;
