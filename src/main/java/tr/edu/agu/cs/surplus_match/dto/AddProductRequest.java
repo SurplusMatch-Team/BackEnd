@@ -1,87 +1,45 @@
 package tr.edu.agu.cs.surplus_match.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
-import tr.edu.agu.cs.surplus_match.model.ProductUnit;
-
 import java.time.LocalDateTime;
 
 public class AddProductRequest {
 
-    @NotBlank
     private String name;
-
-    @NotNull
-    @Min(1)
+    private String description;
     private Integer quantity;
-
-    @NotNull
+    private String unit;
+    private Integer maxClaimQuantity;
     private LocalDateTime expiryDate;
-
-    @NotNull
+    private String status;
     private Long categoryId;
+    private Long marketId;
 
-    /**
-     * Product owner (market user). JSON may send {@code ownerId} or legacy {@code marketId}.
-     */
-    @NotNull
-    @JsonAlias("marketId")
-    private Long ownerId;
+    public AddProductRequest() {}
 
-    /** Defaults to UNIT on the entity when omitted. */
-    private ProductUnit unit;
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public AddProductRequest() {
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getName() {
-        return name;
-    }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
+    public Integer getMaxClaimQuantity() { return maxClaimQuantity; }
+    public void setMaxClaimQuantity(Integer maxClaimQuantity) { this.maxClaimQuantity = maxClaimQuantity; }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+    public LocalDateTime getExpiryDate() { return expiryDate; }
+    public void setExpiryDate(LocalDateTime expiryDate) { this.expiryDate = expiryDate; }
 
-    public LocalDateTime getExpiryDate() {
-        return expiryDate;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setExpiryDate(LocalDateTime expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+    public Long getCategoryId() { return categoryId; }
+    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public ProductUnit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(ProductUnit unit) {
-        this.unit = unit;
-    }
+    public Long getMarketId() { return marketId; }
+    public void setMarketId(Long marketId) { this.marketId = marketId; }
 }

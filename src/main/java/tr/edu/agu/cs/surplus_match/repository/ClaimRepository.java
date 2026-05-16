@@ -8,12 +8,11 @@ import java.util.List;
 
 public interface ClaimRepository extends JpaRepository<Claim, Long> {
 
+    boolean existsByClaimantIdAndProductIdAndStatusIn(Long claimantId, Long productId, List<ClaimStatus> statuses);
+
     List<Claim> findByProductId(Long productId);
 
     List<Claim> findByClaimantId(Long claimantId);
 
-    /** True if this NGO already has an active pending claim on that product */
-    boolean existsByClaimantIdAndProductIdAndStatus(Long claimantId, Long productId, ClaimStatus status);
-
-    long countByProductIdAndStatus(Long productId, ClaimStatus status);
+    List<Claim> findByProductOwnerId(Long ownerId);
 }

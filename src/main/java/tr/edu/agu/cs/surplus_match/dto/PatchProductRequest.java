@@ -1,79 +1,41 @@
 package tr.edu.agu.cs.surplus_match.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import tr.edu.agu.cs.surplus_match.model.ProductUnit;
-
 import java.time.LocalDateTime;
 
-/** Partial update: only non-null fields are applied. {@code ownerId} authorizes MARKET ownership. */
 public class PatchProductRequest {
 
-    /**
-     * Market user performing the edit. JSON may send {@code marketId}.
-     */
-    @NotNull
-    @JsonAlias("marketId")
+    private String name;
+    private String description;
+    private Integer quantity;
+    private String unit;
+    private Integer maxClaimQuantity;
+    private LocalDateTime expiryDate;
+    private Long categoryId;
     private Long ownerId;
 
-    private String name;
+    public PatchProductRequest() {}
 
-    /** When supplied, updates stock (0 closes listing — same as DELETE). */
-    @PositiveOrZero
-    private Integer quantity;
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    private LocalDateTime expiryDate;
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    private Long categoryId;
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    private ProductUnit unit;
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
 
-    public Long getOwnerId() {
-        return ownerId;
-    }
+    public Integer getMaxClaimQuantity() { return maxClaimQuantity; }
+    public void setMaxClaimQuantity(Integer maxClaimQuantity) { this.maxClaimQuantity = maxClaimQuantity; }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
+    public LocalDateTime getExpiryDate() { return expiryDate; }
+    public void setExpiryDate(LocalDateTime expiryDate) { this.expiryDate = expiryDate; }
 
-    public String getName() {
-        return name;
-    }
+    public Long getCategoryId() { return categoryId; }
+    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public LocalDateTime getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(LocalDateTime expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public ProductUnit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(ProductUnit unit) {
-        this.unit = unit;
-    }
+    public Long getOwnerId() { return ownerId; }
+    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
 }
