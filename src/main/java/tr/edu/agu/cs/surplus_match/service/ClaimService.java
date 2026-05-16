@@ -2,8 +2,14 @@ package tr.edu.agu.cs.surplus_match.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tr.edu.agu.cs.surplus_match.model.*;
-import tr.edu.agu.cs.surplus_match.repository.*;
+import tr.edu.agu.cs.surplus_match.model.Claim;
+import tr.edu.agu.cs.surplus_match.model.ClaimStatus;
+import tr.edu.agu.cs.surplus_match.model.Product;
+import tr.edu.agu.cs.surplus_match.model.ProductStatus;
+import tr.edu.agu.cs.surplus_match.model.User;
+import tr.edu.agu.cs.surplus_match.repository.ClaimRepository;
+import tr.edu.agu.cs.surplus_match.repository.ProductRepository;
+import tr.edu.agu.cs.surplus_match.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,10 +54,6 @@ public class ClaimService {
         if (product.getMaxClaimQuantity() != null && requestedQuantity > product.getMaxClaimQuantity()) {
             throw new RuntimeException("Requested quantity exceeds the maximum claim limit of " + product.getMaxClaimQuantity() + ".");
         }
-        if (product.getMaxClaimQuantity() != null
-        && request.getRequestedQuantity() > product.getMaxClaimQuantity()) {
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds max claim quantity.");
-}
 
         product.setStatus(ProductStatus.PENDING);
         productRepository.save(product);
@@ -152,21 +154,15 @@ public class ClaimService {
         claim.setStatus(ClaimStatus.REJECTED);
 
         Product product = claim.getProduct();
+        List<Claim> pendingClaims = claimRepository.findByProductId(product.getId())
+                .stream()
+                .filter(c -> c.getStatus() == ClaimStatus.PENDING && !c.getId().equals(claimId))
+                .toList();
+        if (pendingClaims.isEmpty() && product.getQuantity() > 0) {
+            product.setStatus(ProductStatus.AVAILABLE);
+            productRepository.save(product);
+        }
 
-if (product.getStatus() == ProductStatus.CLOSED) {
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Closed products cannot be edited in claims.");
-}
-
-if (request.getRequestedQuantity() > product.getQuantity()) {
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds product quantity.");
-}
-
-if (product.getMaxClaimQuantity() != null
-        && request.getRequestedQuantity() > product.getMaxClaimQuantity()) {
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds max claim quantity.");
-}
-
-claim.setRequestedQuantity(request.getRequestedQuantity());
         return claimRepository.save(claim);
     }
 
