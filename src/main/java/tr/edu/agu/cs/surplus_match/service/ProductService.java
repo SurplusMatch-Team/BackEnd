@@ -22,30 +22,6 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Product addProduct(AddProductRequest request) {
-        User owner = userRepository.findById(request.getOwnerId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found."));
-
-        if (owner.getRole() != Role.MARKET) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only MARKET users can add products.");
-        }
-
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found."));
-
-        Product product = new Product();
-        product.setName(request.getName());
-        product.setQuantity(request.getQuantity());
-        product.setMaxClaimQuantity(request.getMaxClaimQuantity());
-        product.setExpiryDate(request.getExpiryDate());
-        product.setOwner(owner);
-        product.setCategory(category);
-        product.setStatus(ProductStatus.AVAILABLE);
-        product.setUnit(request.getUnit() != null ? request.getUnit() : ProductUnit.UNIT);
-
-        return productRepository.save(product);
-    }
-
     public List<Product> getAllAvailableProducts() {
         return productRepository.findByStatus(ProductStatus.AVAILABLE);
     }
@@ -54,18 +30,15 @@ public class ProductService {
         return productRepository.findByOwnerId(userId);
     }
 
-    // Task 3: Edit product (PATCH)
     @Transactional
     public Product updateProduct(Long productId, PatchProductRequest request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found!"));
 
-        // Verify ownership
         if (request.getOwnerId() != null && !product.getOwner().getId().equals(request.getOwnerId())) {
             throw new RuntimeException("You are not the owner of this product.");
         }
 
-        // Only update non-null fields (PATCH behavior)
         if (request.getName() != null) {
             product.setName(request.getName());
         }
@@ -81,9 +54,6 @@ public class ProductService {
         if (request.getMaxClaimQuantity() != null) {
             product.setMaxClaimQuantity(request.getMaxClaimQuantity());
         }
-        if (request.getMaxClaimQuantity() != null) {
-    product.setMaxClaimQuantity(request.getMaxClaimQuantity());
-}
         if (request.getExpiryDate() != null) {
             product.setExpiryDate(request.getExpiryDate());
         }
@@ -96,7 +66,6 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    // Task 3: Soft delete — set status CLOSED and quantity 0
     @Transactional
     public Product softDeleteProduct(Long productId, Long ownerId) {
         Product product = productRepository.findById(productId)

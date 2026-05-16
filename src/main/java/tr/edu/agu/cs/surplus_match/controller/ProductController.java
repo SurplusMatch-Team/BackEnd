@@ -7,6 +7,7 @@ import tr.edu.agu.cs.surplus_match.dto.AddProductRequest;
 import tr.edu.agu.cs.surplus_match.dto.PatchProductRequest;
 import tr.edu.agu.cs.surplus_match.model.Category;
 import tr.edu.agu.cs.surplus_match.model.Product;
+import tr.edu.agu.cs.surplus_match.model.ProductStatus;
 import tr.edu.agu.cs.surplus_match.model.Role;
 import tr.edu.agu.cs.surplus_match.model.User;
 import tr.edu.agu.cs.surplus_match.repository.CategoryRepository;
@@ -20,7 +21,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "*")
 public class ProductController {
 
     private final ProductRepository productRepository;
@@ -77,6 +77,7 @@ public class ProductController {
         if (request.getMaxClaimQuantity() != null) {
             product.setMaxClaimQuantity(request.getMaxClaimQuantity());
         }
+        product.setStatus(ProductStatus.AVAILABLE);
 
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);

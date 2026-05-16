@@ -1,6 +1,13 @@
 package tr.edu.agu.cs.surplus_match.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "addresses")
@@ -26,46 +33,59 @@ public class Address {
     public Address() {
     }
 
-    @ManyToOne
-    @JoinColumn(name = "users_id")
-    private User user;
+    public Long getId() {
+        return id;
+    }
 
-    public Address() {}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public String getCity() {
+        return city;
+    }
 
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-    public String getDistrict() { return district; }
-    public void setDistrict(String district) { this.district = district; }
+    public String getDistrict() {
+        return district;
+    }
 
-    public String getFullAddress() { return fullAddress; }
-    public void setFullAddress(String fullAddress) { this.fullAddress = fullAddress; }
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
 
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
     }
+
     public Double getLatitude() {
-    return latitude;
-}
+        return latitude;
+    }
 
-public void setLatitude(Double latitude) {
-    this.latitude = latitude;
-}
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
 
-public Double getLongitude() {
-    return longitude;
-}
+    public Double getLongitude() {
+        return longitude;
+    }
 
-public void setLongitude(Double longitude) {
-    this.longitude = longitude;
-}
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 
-    public Double getLongitude() { return longitude; }
-    public void setLongitude(Double longitude) { this.longitude = longitude; }
+    public User getUser() {
+        return user;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
