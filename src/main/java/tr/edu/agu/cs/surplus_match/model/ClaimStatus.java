@@ -5,7 +5,7 @@ package tr.edu.agu.cs.surplus_match.model;
  * PENDING: Claim is awaiting approval
  * APPROVED: Claim has been approved
  * REJECTED: Claim has been rejected
- * WITHDRAWN: Withdrawn by NGO before resolution
+ * WITHDRAWN: Claim was withdrawn by the NGO
  */
 public enum ClaimStatus {
     PENDING,

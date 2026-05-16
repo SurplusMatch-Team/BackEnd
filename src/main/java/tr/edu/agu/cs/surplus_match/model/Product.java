@@ -1,26 +1,11 @@
 package tr.edu.agu.cs.surplus_match.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "products")
 public class Product {
@@ -44,16 +29,15 @@ private Integer maxClaimQuantity;
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 32)
-    private ProductUnit unit;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -68,47 +52,40 @@ private Integer maxClaimQuantity;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Claim> claims = new ArrayList<>();
 
-    public Product() {
-    }
+    public Product() {}
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
         if (this.status == null) {
             this.status = ProductStatus.AVAILABLE;
         }
-        if (this.unit == null) {
-            this.unit = ProductUnit.UNIT;
-        }
     }
 
-    public Long getId() {
-        return id;
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // --- Getters and Setters ---
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getDescription() {
-        return description;
-    }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
+    public Integer getMaxClaimQuantity() { return maxClaimQuantity; }
+    public void setMaxClaimQuantity(Integer maxClaimQuantity) { this.maxClaimQuantity = maxClaimQuantity; }
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
@@ -121,59 +98,21 @@ public void setMaxClaimQuantity(Integer maxClaimQuantity) {
     this.maxClaimQuantity = maxClaimQuantity;
 }
 
-    public LocalDateTime getExpiryDate() {
-        return expiryDate;
-    }
+    public ProductStatus getStatus() { return status; }
+    public void setStatus(ProductStatus status) { this.status = status; }
 
-    public void setExpiryDate(LocalDateTime expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 
-    public ProductStatus getStatus() {
-        return status;
-    }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 
-    public void setStatus(ProductStatus status) {
-        this.status = status;
-    }
-
-    public ProductUnit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(ProductUnit unit) {
-        this.unit = unit;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public List<Claim> getClaims() {
-        return claims;
-    }
-
-    public void setClaims(List<Claim> claims) {
-        this.claims = claims;
-    }
+    public List<Claim> getClaims() { return claims; }
+    public void setClaims(List<Claim> claims) { this.claims = claims; }
 }

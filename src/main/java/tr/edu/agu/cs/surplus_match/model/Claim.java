@@ -48,6 +48,13 @@ public class Claim {
     public Claim() {
     }
 
+    public Claim(User claimant, Product product, Integer requestedQuantity, ClaimStatus status) {
+        this.claimant = claimant;
+        this.product = product;
+        this.requestedQuantity = requestedQuantity;
+        this.status = status;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.claimDate = LocalDateTime.now();

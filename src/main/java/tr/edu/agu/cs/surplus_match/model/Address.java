@@ -1,13 +1,6 @@
 package tr.edu.agu.cs.surplus_match.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "addresses")
@@ -33,33 +26,23 @@ public class Address {
     public Address() {
     }
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private User user;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Address() {}
 
-    public String getCity() {
-        return city;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
 
-    public String getDistrict() {
-        return district;
-    }
+    public String getDistrict() { return district; }
+    public void setDistrict(String district) { this.district = district; }
 
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getFullAddress() {
-        return fullAddress;
-    }
+    public String getFullAddress() { return fullAddress; }
+    public void setFullAddress(String fullAddress) { this.fullAddress = fullAddress; }
 
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
@@ -80,11 +63,9 @@ public void setLongitude(Double longitude) {
     this.longitude = longitude;
 }
 
-    public User getUser() {
-        return user;
-    }
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }
