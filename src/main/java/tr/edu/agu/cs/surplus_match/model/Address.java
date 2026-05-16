@@ -19,6 +19,13 @@ public class Address {
     private Double latitude;
     private Double longitude;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Address() {
+    }
+
     @ManyToOne
     @JoinColumn(name = "users_id")
     private User user;
@@ -37,8 +44,24 @@ public class Address {
     public String getFullAddress() { return fullAddress; }
     public void setFullAddress(String fullAddress) { this.fullAddress = fullAddress; }
 
-    public Double getLatitude() { return latitude; }
-    public void setLatitude(Double latitude) { this.latitude = latitude; }
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+    public Double getLatitude() {
+    return latitude;
+}
+
+public void setLatitude(Double latitude) {
+    this.latitude = latitude;
+}
+
+public Double getLongitude() {
+    return longitude;
+}
+
+public void setLongitude(Double longitude) {
+    this.longitude = longitude;
+}
 
     public Double getLongitude() { return longitude; }
     public void setLongitude(Double longitude) { this.longitude = longitude; }

@@ -22,6 +22,30 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
+    public Product addProduct(AddProductRequest request) {
+        User owner = userRepository.findById(request.getOwnerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found."));
+
+        if (owner.getRole() != Role.MARKET) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only MARKET users can add products.");
+        }
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found."));
+
+        Product product = new Product();
+        product.setName(request.getName());
+        product.setQuantity(request.getQuantity());
+        product.setMaxClaimQuantity(request.getMaxClaimQuantity());
+        product.setExpiryDate(request.getExpiryDate());
+        product.setOwner(owner);
+        product.setCategory(category);
+        product.setStatus(ProductStatus.AVAILABLE);
+        product.setUnit(request.getUnit() != null ? request.getUnit() : ProductUnit.UNIT);
+
+        return productRepository.save(product);
+    }
+
     public List<Product> getAllAvailableProducts() {
         return productRepository.findByStatus(ProductStatus.AVAILABLE);
     }
@@ -57,6 +81,9 @@ public class ProductService {
         if (request.getMaxClaimQuantity() != null) {
             product.setMaxClaimQuantity(request.getMaxClaimQuantity());
         }
+        if (request.getMaxClaimQuantity() != null) {
+    product.setMaxClaimQuantity(request.getMaxClaimQuantity());
+}
         if (request.getExpiryDate() != null) {
             product.setExpiryDate(request.getExpiryDate());
         }

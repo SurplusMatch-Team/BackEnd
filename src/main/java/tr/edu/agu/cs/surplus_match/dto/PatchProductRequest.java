@@ -7,8 +7,9 @@ public class PatchProductRequest {
     private String name;
     private String description;
     private Integer quantity;
-    private String unit;
-    private Integer maxClaimQuantity;
+    @PositiveOrZero
+private Integer maxClaimQuantity;
+
     private LocalDateTime expiryDate;
     private Long categoryId;
     private Long ownerId;
@@ -21,8 +22,17 @@ public class PatchProductRequest {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Integer getMaxClaimQuantity() {
+    return maxClaimQuantity;
+}
+
+public void setMaxClaimQuantity(Integer maxClaimQuantity) {
+    this.maxClaimQuantity = maxClaimQuantity;
+}
+
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
+    }
 
     public String getUnit() { return unit; }
     public void setUnit(String unit) { this.unit = unit; }

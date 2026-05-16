@@ -7,8 +7,11 @@ public class AddProductRequest {
     private String name;
     private String description;
     private Integer quantity;
-    private String unit;
+
+    @Min(1)
     private Integer maxClaimQuantity;
+
+    @NotNull
     private LocalDateTime expiryDate;
     private String status;
     private Long categoryId;
@@ -19,8 +22,16 @@ public class AddProductRequest {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public Integer getMaxClaimQuantity() {
+    return maxClaimQuantity;
+}
+
+public void setMaxClaimQuantity(Integer maxClaimQuantity) {
+    this.maxClaimQuantity = maxClaimQuantity;
+}
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
+    }
 
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }

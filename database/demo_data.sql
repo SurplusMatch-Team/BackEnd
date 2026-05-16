@@ -3,11 +3,12 @@ USE mydb;
 -- Demo users are intentionally not inserted here.
 -- Create them through /api/auth/register so passwords are hashed by backend logic.
 
-INSERT INTO products (name, description, quantity, expiry_date, created_at, updated_at, status, unit, user_id, category_id)
+INSERT INTO products (name, description, quantity, max_claim_quantity, expiry_date, created_at, updated_at, status, unit, user_id, category_id)
 SELECT
     'Bread',
     'Fresh bakery bread',
     30,
+    5,
     DATE_ADD(NOW(), INTERVAL 1 DAY),
     NOW(),
     NOW(),
@@ -29,6 +30,7 @@ SELECT
     'Tomatoes',
     'Fresh ripe tomatoes',
     15,
+    4,
     DATE_ADD(NOW(), INTERVAL 2 DAY),
     NOW(),
     NOW(),
@@ -50,6 +52,7 @@ SELECT
     'Milk',
     'Dairy milk',
     10,
+    3,
     DATE_ADD(NOW(), INTERVAL 1 DAY),
     NOW(),
     NOW(),
@@ -71,6 +74,7 @@ SELECT
     'Apples',
     'Fresh apples',
     20,
+    5,
     DATE_ADD(NOW(), INTERVAL 5 DAY),
     NOW(),
     NOW(),
@@ -92,6 +96,7 @@ SELECT
     'Rice',
     'Dry food rice',
     50,
+    10,
     DATE_ADD(NOW(), INTERVAL 30 DAY),
     NOW(),
     NOW(),
