@@ -18,6 +18,9 @@ public class AddProductRequest {
     @Min(1)
     private Integer quantity;
 
+    @Min(1)
+    private Integer maxClaimQuantity;
+
     @NotNull
     private LocalDateTime expiryDate;
 
@@ -53,6 +56,13 @@ public class AddProductRequest {
         this.quantity = quantity;
     }
 
+    public Integer getMaxClaimQuantity() {
+    return maxClaimQuantity;
+}
+
+public void setMaxClaimQuantity(Integer maxClaimQuantity) {
+    this.maxClaimQuantity = maxClaimQuantity;
+}
     public LocalDateTime getExpiryDate() {
         return expiryDate;
     }

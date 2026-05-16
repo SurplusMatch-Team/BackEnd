@@ -38,6 +38,9 @@ public class Product {
     @Column(nullable = false)
     private Integer quantity;
 
+    @Column(name = "max_claim_quantity")
+private Integer maxClaimQuantity;
+
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
@@ -110,6 +113,13 @@ public class Product {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+    public Integer getMaxClaimQuantity() {
+    return maxClaimQuantity;
+}
+
+public void setMaxClaimQuantity(Integer maxClaimQuantity) {
+    this.maxClaimQuantity = maxClaimQuantity;
+}
 
     public LocalDateTime getExpiryDate() {
         return expiryDate;

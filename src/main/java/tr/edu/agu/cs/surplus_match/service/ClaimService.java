@@ -62,6 +62,10 @@ public class ClaimService {
         if (request.getRequestedQuantity() > product.getQuantity()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds product quantity.");
         }
+        if (product.getMaxClaimQuantity() != null
+        && request.getRequestedQuantity() > product.getMaxClaimQuantity()) {
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds max claim quantity.");
+}
 
         Claim claim = new Claim();
         claim.setClaimant(claimant);
@@ -175,11 +179,21 @@ public class ClaimService {
         }
 
         Product product = claim.getProduct();
-        if (request.getRequestedQuantity() > product.getQuantity()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds product quantity.");
-        }
 
-        claim.setRequestedQuantity(request.getRequestedQuantity());
+if (product.getStatus() == ProductStatus.CLOSED) {
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Closed products cannot be edited in claims.");
+}
+
+if (request.getRequestedQuantity() > product.getQuantity()) {
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds product quantity.");
+}
+
+if (product.getMaxClaimQuantity() != null
+        && request.getRequestedQuantity() > product.getMaxClaimQuantity()) {
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requested quantity exceeds max claim quantity.");
+}
+
+claim.setRequestedQuantity(request.getRequestedQuantity());
         return claimRepository.save(claim);
     }
 

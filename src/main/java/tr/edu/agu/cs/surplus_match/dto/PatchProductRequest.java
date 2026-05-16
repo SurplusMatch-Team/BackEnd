@@ -22,6 +22,8 @@ public class PatchProductRequest {
     /** When supplied, updates stock (0 closes listing — same as DELETE). */
     @PositiveOrZero
     private Integer quantity;
+    @PositiveOrZero
+private Integer maxClaimQuantity;
 
     private LocalDateTime expiryDate;
 
@@ -52,6 +54,14 @@ public class PatchProductRequest {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+    public Integer getMaxClaimQuantity() {
+    return maxClaimQuantity;
+}
+
+public void setMaxClaimQuantity(Integer maxClaimQuantity) {
+    this.maxClaimQuantity = maxClaimQuantity;
+}
 
     public LocalDateTime getExpiryDate() {
         return expiryDate;

@@ -48,6 +48,7 @@ public class ProductService {
         Product product = new Product();
         product.setName(request.getName());
         product.setQuantity(request.getQuantity());
+        product.setMaxClaimQuantity(request.getMaxClaimQuantity());
         product.setExpiryDate(request.getExpiryDate());
         product.setOwner(owner);
         product.setCategory(category);
@@ -96,6 +97,9 @@ public class ProductService {
                 product.setQuantity(request.getQuantity());
             }
         }
+        if (request.getMaxClaimQuantity() != null) {
+    product.setMaxClaimQuantity(request.getMaxClaimQuantity());
+}
         if (request.getExpiryDate() != null) {
             product.setExpiryDate(request.getExpiryDate());
         }
