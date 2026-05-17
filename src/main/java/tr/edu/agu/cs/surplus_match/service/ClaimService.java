@@ -40,9 +40,11 @@ public class ClaimService {
         }
 
         boolean duplicate = claimRepository.existsByClaimantIdAndProductIdAndStatusIn(
-                claimantId, productId, Arrays.asList(ClaimStatus.PENDING, ClaimStatus.APPROVED));
+                claimantId,
+                productId,
+                Arrays.asList(ClaimStatus.PENDING, ClaimStatus.APPROVED, ClaimStatus.REJECTED));
         if (duplicate) {
-            throw new RuntimeException("You already have an active claim on this product.");
+            throw new RuntimeException("You have already submitted a claim on this listing.");
         }
 
         if (requestedQuantity == null || requestedQuantity <= 0) {
