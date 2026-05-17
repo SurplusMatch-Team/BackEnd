@@ -28,6 +28,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -38,7 +39,6 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @JsonIgnore
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Address address;
 

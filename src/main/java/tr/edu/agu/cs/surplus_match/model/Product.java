@@ -59,7 +59,6 @@ public class Product {
     @Column(nullable = false, length = 32)
     private ProductUnit unit;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;

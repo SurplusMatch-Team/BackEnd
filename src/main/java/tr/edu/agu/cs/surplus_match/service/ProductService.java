@@ -23,11 +23,11 @@ public class ProductService {
     }
 
     public List<Product> getAllAvailableProducts() {
-        return productRepository.findByStatus(ProductStatus.AVAILABLE);
+        return productRepository.findByStatusWithOwnerAddress(ProductStatus.AVAILABLE);
     }
 
     public List<Product> getProductsByUserId(Long userId) {
-        return productRepository.findByOwnerId(userId);
+        return productRepository.findByOwnerIdWithOwnerAddress(userId);
     }
 
     @Transactional

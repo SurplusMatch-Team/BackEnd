@@ -1,6 +1,5 @@
 package tr.edu.agu.cs.surplus_match.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +35,6 @@ public class Claim {
     @Column(nullable = false)
     private ClaimStatus status;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "claimant_id", nullable = false)
     private User claimant;
