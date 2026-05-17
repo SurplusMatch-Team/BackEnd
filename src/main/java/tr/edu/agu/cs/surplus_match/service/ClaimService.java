@@ -167,10 +167,10 @@ public class ClaimService {
     }
 
     public List<Claim> getClaimsByProductOwner(Long ownerId) {
-        return claimRepository.findByProductOwnerId(ownerId);
+        return claimRepository.findByProductOwnerIdWithDetails(ownerId);
     }
 
     public List<Claim> getClaimsByClaimant(Long claimantId) {
-        return claimRepository.findByClaimantId(claimantId);
+        return claimRepository.findByClaimantIdWithDetails(claimantId);
     }
 }
